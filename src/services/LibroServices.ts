@@ -6,7 +6,7 @@ import axios from 'axios';
 
 export async function getCatalog(): Promise<BookCatalog> {
     try {
-        const { data } = await api.get<BookCatalog>("/book/catalog");
+        const { data } = await api.get<BookCatalog>("/catalog");
 
         if (!data) throw new Error("Respuesta vacía del servidor");
         return data;
@@ -23,7 +23,7 @@ export async function getCatalog(): Promise<BookCatalog> {
 
 export async function getBookById(id: string): Promise<Book> {
     try {
-        const { data } = await api.get<bookResponse>(`/book/book/${id}`);
+        const { data } = await api.get<bookResponse>(`/book/${id}`);
         if (!data) throw new Error("Respuesta vacía del servidor");
         return data.book;
 

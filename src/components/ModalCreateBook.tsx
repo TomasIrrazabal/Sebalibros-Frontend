@@ -45,14 +45,14 @@ export default function ModalCreateBook() {
         const image = { image: imageFile }
 
         try {
-            const { data: filePath } = await api.post('/image/uploadimage', image, {
+            const { data: filePath } = await api.post('/uploadimage', image, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
 
             data.image = filePath.data
             const book = { book: data }
 
-            await api.post('/book/admin/book', book, {
+            await api.post('/admin/book', book, {
                 headers: { 'Content-Type': 'application/json' }
             })
 

@@ -24,7 +24,7 @@ export default function ContactView() {
 
     const handleForm = async (formData: ClienteForm) => {
         try {
-            const { data } = await api.post('/book/contact', formData)
+            const { data } = await api.post('/contact', formData)
             if (data) {
                 reset()
             }

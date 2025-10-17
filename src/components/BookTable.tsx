@@ -93,7 +93,7 @@ export default function BookTable() {
 
     const handleDelete = async (id: number) => {
         try {
-            const response = await api.delete(`/book/admin/book/${id}`)
+            const response = await api.delete(`/admin/book/${id}`)
 
             if (response.status === 204) {
                 fetchCatalog()
