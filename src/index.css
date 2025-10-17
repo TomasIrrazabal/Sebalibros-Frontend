@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+
+:root {
+    --color-violeta-principal: #6E00B3;
+    --color-violeta-secundario: #4d007c;
+
+}
+
+
+* {
+    font-family: "Manrope", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+.boton_principal {
+    background-color: var(--color-violeta-principal);
+    color: #ffffff;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+
+    transition-property: background-color, transform, box-shadow;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.boton_principal:hover {
+    /* Propiedades de Hover de Tailwind: hover:bg-indigo-700, hover:scale-105 */
+    background-color: var(--color-violeta-secundario);
+    /* indigo-700 */
+    transform: scale(1.05);
+    /* Aplica el ligero aumento de tamaño */
+}
+
+.contenedor {
+    @apply w-full max-w-7xl mx-auto px-4 md:px-4;
+}
