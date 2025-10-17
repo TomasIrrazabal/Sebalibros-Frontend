@@ -15,7 +15,7 @@ const initialValues: BookFormEdit = {
     description: '',
     price: 0,
     author: '',
-    image: undefined, //?
+    image: '', //?
     format: '', // ?
     bookBinding: '', // ?
     isbn: '',
@@ -94,7 +94,7 @@ export default function ModalEditarLibro() {
         try {
             if (imageFile) {
                 const image = { image: imageFile }
-                const { data: filePath } = await api.post('/uploadimage', image, {
+                const { data: filePath } = await api.post('/image', image, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 })
 
@@ -107,12 +107,17 @@ export default function ModalEditarLibro() {
 
 
 
-
             if (Object.keys(updateData).length === 0) {
+
                 window.alert("No se detectó ningún cambio en el formulario.");
+
             } else {
                 const aux = { id: book.id, ...updateData }
                 await api.patch('/admin/book', aux)
+
+
+                await api.delete('/image', { data: { filePath: book.image } })
+
                 reset()
                 navigate('/admin')
             }
