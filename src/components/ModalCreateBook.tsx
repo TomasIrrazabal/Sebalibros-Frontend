@@ -19,7 +19,8 @@ const initialValues: BookFormCreate = {
     isbn: '',
     resume: '', // ?
     especiality: '', // ?
-    state: Status.inactive
+    state: Status.inactive,
+    pages: 1
 }
 
 export default function ModalCreateBook() {
@@ -40,7 +41,7 @@ export default function ModalCreateBook() {
         setLoading(true)
         setError(null)
         data.price = Number(data.price)
-
+        data.pages = Number(data.pages)
         const image = { image: imageFile }
 
         try {
