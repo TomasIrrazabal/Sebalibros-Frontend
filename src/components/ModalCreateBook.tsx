@@ -33,7 +33,7 @@ export default function ModalCreateBook() {
 
 
 
-    const { register, reset, handleSubmit, formState: { errors } } = useForm<BookFormCreate>({ defaultValues: initialValues })
+    const { register, reset, handleSubmit, formState: { errors }, clearErrors } = useForm<BookFormCreate>({ defaultValues: initialValues })
 
 
     const handleForm = async (data: BookFormCreate) => {
@@ -73,6 +73,7 @@ export default function ModalCreateBook() {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setImageFile(e.target.files[0]);
+            clearErrors('image')
         } else {
             setImageFile(null);
         }
@@ -251,18 +252,24 @@ export default function ModalCreateBook() {
                         {/* Campo de Carga de Imagen */}
                         <div className="col-span-1 md:col-span-2 grid grid-cols-1 space-y-3">
                             <label htmlFor="imagenFile" className='text-xl text-slate-700'>
-                                Subir Imagen
+                                Subir Imagen *
                             </label>
                             <input
                                 id="imagenFile"
                                 type="file"
                                 accept="image/*"
-                                onChange={handleImageChange}
+
                                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-slate-500 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+
+                                {...register('image', {
+                                    validate: () => imageFile !== null || 'La imagen es obligatoria'
+                                })}
+                                onChange={handleImageChange}
                             />
+                            {errors.image && <MensajeError>{errors.image.message}</MensajeError>}
                             {imageFile && (
                                 <img
-                                    src={URL.createObjectURL(imageFile)} // <-- Previsualización
+                                    src={URL.createObjectURL(imageFile)}
                                     alt="Vista previa"
                                     className="w-20 h-20 object-cover rounded-lg"
                                 />
