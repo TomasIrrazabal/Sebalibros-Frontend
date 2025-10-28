@@ -2,12 +2,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import AppLayout from './layout/AppLayout'
 import IndexView from './view/IndexView'
 import CatalogoView from './view/CatalogoView'
-import LibroDetalleView from './view/DetailedBookView'
-import ContactoView from './view/ContactView'
-import TablaLibros from './components/BookTable'
+import DetailedBookView from './view/DetailedBookView'
+import ContactView from './view/ContactView'
+import BooksTable from './components/BookTable'
 import AdminLayout from './layout/AdminLayout'
-import ModalEditarLibro from './components/ModalEditarLibro'
-import ModalCrearLibro from './components/ModalCreateBook'
+import ModalEditBook from './components/ModalEditBook'
+import ModalCreateBook from './components/ModalCreateBook'
 
 
 export default function Router() {
@@ -17,13 +17,13 @@ export default function Router() {
                 <Route element={<AppLayout />}>
                     <Route path='/' element={<IndexView />} />
                     <Route path='/catalogo' element={<CatalogoView />} />
-                    <Route path='/catalogo/:id' element={<LibroDetalleView />} />
-                    <Route path='/contacto' element={<ContactoView />} />
+                    <Route path='/catalogo/:id' element={<DetailedBookView />} />
+                    <Route path='/contacto' element={<ContactView />} />
                 </Route>
                 <Route element={<AdminLayout />}>
-                    <Route path='/admin' element={<TablaLibros />} />
-                    <Route path='/admin/editarlibro/:id' element={<ModalEditarLibro />} />
-                    <Route path='/admin/crearlibro' element={<ModalCrearLibro />} />
+                    <Route path='/admin' element={<BooksTable />} />
+                    <Route path='/admin/editarlibro/:id' element={<ModalEditBook />} />
+                    <Route path='/admin/crearlibro' element={<ModalCreateBook />} />
                 </Route>
             </Routes>
         </BrowserRouter>

@@ -25,7 +25,7 @@ const initialValues: BookFormEdit = {
     pages: 1
 }
 
-export default function ModalEditarLibro() {
+export default function ModalEditBook() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [book, setBook] = useState<BookFormEdit>(initialValues)

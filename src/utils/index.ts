@@ -1,6 +1,6 @@
 // supabase.ts
 import { createClient } from '@supabase/supabase-js'
-import { Status, type BookFormEdit } from './types';
+import { Status } from './types';
 
 export const supabase = createClient(
     import.meta.env.VITE_SUPABASE_URL!,
