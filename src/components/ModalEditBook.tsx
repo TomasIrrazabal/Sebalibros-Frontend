@@ -59,10 +59,6 @@ export default function ModalEditBook() {
                     throw new Error("No se pudo obtener la informacion desde el servidor.")
                 }
 
-
-                if (!id) {
-                    throw new Error('Error, no se encontro el libro')
-                }
                 const urlAux = publicUrl(bucket, data.image as string)
                 setUrlImagen(urlAux)
                 setBook(data)
@@ -85,52 +81,61 @@ export default function ModalEditBook() {
 
 
     const handleForm = async (data: BookFormEdit) => {
-
-        setLoading(true)
-        setError(null)
-        data.price = Number(data.price)
-        data.pages = Number(data.pages)
+        setLoading(true);
+        setError(null);
 
         try {
-            if (imageFile) {
-                const image = { image: imageFile }
-                const { data: filePath } = await api.post('/image', image, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                })
 
-                data.image = filePath.data
-            }
+            const updatedData = getDifferences(book, data);
+
+            const hasFieldChanges = Object.keys(updatedData).length > 0;
+            const hasNewImage = imageFile !== null;
 
 
-            const updateData = getDifferences(book, data);
-
-
-
-
-            if (Object.keys(updateData).length === 0) {
-
+            if (!hasFieldChanges && !hasNewImage) {
                 window.alert("No se detectó ningún cambio en el formulario.");
-
-            } else {
-                const aux = { id: book.id, ...updateData }
-                await api.patch('/admin/book', aux)
-
-
-                await api.delete('/image', { data: { filePath: book.image } })
-
-                reset()
-                navigate('/admin')
+                return;
             }
+
+
+            const formData = new FormData();
+
+
+            formData.append('id', String(book.id));
+
+
+            for (const [key, value] of Object.entries(updatedData)) {
+                if (value !== undefined && value !== null) {
+                    formData.append(key, String(value));
+                }
+            }
+
+
+            if (hasNewImage && imageFile) {
+                formData.append('image', imageFile);
+            }
+
+
+
+            await api.patch('/admin/book', formData)
+
+
+            if (hasNewImage) {
+
+                await api.delete('/image', { data: { filePath: book.image } });
+            }
+
+            navigate('/admin');
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                setError(error.response?.data.error)
+                setError(error.response?.data?.error || 'Error en la solicitud');
             } else {
-                setError('An unknown error has occurred')
+                setError('An unknown error has occurred');
             }
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {

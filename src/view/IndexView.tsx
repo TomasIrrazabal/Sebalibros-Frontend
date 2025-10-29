@@ -22,7 +22,7 @@ export default function InicioView() {
         const fetchLibros = async () => {
             try {
                 setLoading(true)
-                const { data } = await api.get('/catalog')
+                const { data } = await api.get('/books')
 
 
                 if (!data) {

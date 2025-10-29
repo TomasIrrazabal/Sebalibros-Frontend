@@ -33,31 +33,41 @@ export default function ModalCreateBook() {
 
 
 
-    const { register, reset, handleSubmit, formState: { errors }, clearErrors } = useForm<BookFormCreate>({ defaultValues: initialValues })
+    const { register, handleSubmit, formState: { errors }, clearErrors } = useForm<BookFormCreate>({ defaultValues: initialValues })
 
 
     const handleForm = async (data: BookFormCreate) => {
 
         setLoading(true)
         setError(null)
-        data.price = Number(data.price)
-        data.pages = Number(data.pages)
-        const image = { image: imageFile, filePath: data.image }
+
 
         try {
-            const { data: filePath } = await api.post('/image', image, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            })
-            // console.log(filePath)
-            data.image = filePath.data
-            const book = { book: data }
+            const formData = new FormData()
 
-            await api.post('/admin/book', book, {
-                headers: { 'Content-Type': 'application/json' }
-            })
+            if (imageFile && data) {
+                formData.append('image', imageFile);
+                formData.append('title', data.title);
+                formData.append('description', data.description);
+                formData.append('price', String(data.price));
+                formData.append('author', data.author);
+                formData.append('format', String(data.format));
+                formData.append('bookBinding', String(data.bookBinding));
+                formData.append('isbn', data.isbn);
+                formData.append('resume', String(data.resume));
+                formData.append('especiality', String(data.especiality));
+                formData.append('state', data.state);
+                formData.append('pages', String(data.pages));
+                formData.append('dateUpload', new Date().toISOString());
 
-            reset()
-            navigate('/admin')
+                await api.post('/admin/book', formData)
+
+                navigate('/admin')
+
+            } else {
+                throw new Error('Debe seleccionar una imagen.');
+            }
+
 
         } catch (error) {
             if (axios.isAxiosError(error)) {
