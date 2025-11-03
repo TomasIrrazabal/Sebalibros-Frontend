@@ -18,7 +18,6 @@ export default function Router() {
                     <Route path='/' element={<IndexView />} />
                     <Route path='/catalogo' element={<CatalogoView />} />
                     <Route path='/catalogo/:id' element={<DetailedBookView />} />
-                    <Route path='/contacto' element={<ContactView />} />
                 </Route>
                 <Route element={<AdminLayout />}>
                     <Route path='/admin' element={<BooksTable />} />

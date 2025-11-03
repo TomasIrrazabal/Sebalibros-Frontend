@@ -77,6 +77,15 @@ export default function InicioView() {
                     <Link to='/catalogo' className='m-15 boton_principal'>Ver Libros</Link>
                 </div>
 
+                <section className='flex flex-col items-center justify-center text-start border-b border-b-black/20 border-t-solid shadow-t-2xl shadow-t-black shadow-t-md contenedor  h-40'>
+                    <div>
+                        <h2 className='font-bold mt-4 text-2xl text-center'>Contactanos</h2>
+                        <p className='mb-1 text-black/90 text-center'>Si buscas asesoría no dudes en contactarnos. Puedes enviar tu consulta a travez de
+                            <Link to='#' className='font-bold underline text-(--color-violeta-secundario)' > What's App</Link> o llamarnos al <Link to='#' className='font-bold underline text-(--color-violeta-secundario)'>+1-2345-6789</Link>
+                        </p>
+                    </div>
+                </section>
+
                 <div className='flex flex-col items-center text-start'>
                     <h2 className='font-bold mt-4 text-2xl'>Nuestros Libros Más Populares</h2>
                     <p className='mb-1 text-black/70'>Explora nuestra colección repleta de textos esenciales</p>
@@ -103,14 +112,6 @@ export default function InicioView() {
                     </section>
                 </div>
             </main>
-            <section className='flex flex-col items-center text-start border-t border-t-black/20 border-t-solid shadow-t-2xl shadow-t-black shadow-t-md contenedor mb-4'>
-                <div>
-                    <h2 className='font-bold mt-4 text-2xl'>Contacto</h2>
-                    <p className='mb-1 text-black/90'>Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos. Puedes enviar tu consulta a travez de
-                        <Link to='/contacto' className='font-bold underline text-(--color-violeta-secundario)' > contacto</Link> o llamarnos al <Link to='#' className='font-bold underline text-(--color-violeta-secundario)'>+1-2345-6789</Link>
-                    </p>
-                </div>
-            </section>
         </div>
     )
 }
