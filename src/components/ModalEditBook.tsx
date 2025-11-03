@@ -113,18 +113,10 @@ export default function ModalEditBook() {
 
             if (hasNewImage && imageFile) {
                 formData.append('image', imageFile);
+                formData.append('originalImage', book.image)
             }
-
-
 
             await api.patch('/admin/book', formData)
-
-
-            if (hasNewImage) {
-
-                await api.delete('/image', { data: { filePath: book.image } });
-            }
-
             navigate('/admin');
         } catch (error) {
             if (axios.isAxiosError(error)) {
