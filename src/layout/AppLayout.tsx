@@ -25,10 +25,6 @@ export default function AppLayout() {
                                 Catálogo
                             </Link>
 
-                            <Link to='/contacto' className='text-center rounded-sm w-24 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white hover:font-bold'>
-                                Contacto
-                            </Link>
-
                             <Link to='/admin' className='text-center rounded-sm w-10 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white '>
                                 <i className="fa-solid fa-user hover:text-white"></i>
                             </Link>
@@ -52,9 +48,7 @@ export default function AppLayout() {
                             <Link to='/catalogo' className='text-center rounded-sm hover:bg-white hover:text-black hover:font-bold w-24 '>
                                 Catálogo
                             </Link>
-                            <Link to='/contacto' className='text-center rounded-sm hover:bg-white  hover:text-black hover:font-bold w-24'>
-                                Contacto
-                            </Link>
+
                         </ul>
                         <div className='text-center mt-8  '>
                             <a className='items-center' href="https://www.instagram.com/seba.libros"><i className='fab fa-instagram'></i></a>
