@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import api from '../config/axios';
 import axios from 'axios';
 import { publicUrl } from '../utils';
-import { Status, type BookCatalog, type SimpleBookCard } from '../utils/types';
+import { Status, type SimpleBookCard } from '../types/bookTypes';
 import BookCard from '../components/BookCard';
 
 
@@ -74,7 +74,7 @@ export default function InicioView() {
                 <div className='bg-[url("/hero.png")] min-h-[60vh] flex flex-col items-center justify-start text-center bg-cover bg-center bg-no-repeat'>
                     <h1 className='font-bold text-6xl text-white mt-15 '>Libros de Veterinaria</h1>
                     <p className='text-2xl text-white'>Encuentra los mejores libros para profesionales de la veterinaria</p>
-                    <Link to='/catalogo' className='m-15 boton_principal'>Ver Libros</Link>
+                    <Link to='/catalog' className='m-15 boton_principal'>Ver Libros</Link>
                 </div>
 
                 <section className='flex flex-col items-center justify-center text-start border-b border-b-black/20 border-t-solid shadow-t-2xl shadow-t-black shadow-t-md contenedor  h-40'>

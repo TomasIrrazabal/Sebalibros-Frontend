@@ -1,5 +1,5 @@
 import api from "../config/axios";
-import type { BookCatalog, Book, bookResponse } from "../utils/types";
+import type { BookCatalog, Book, bookResponse } from "../types/bookTypes";
 import axios from 'axios';
 
 

@@ -1,4 +1,4 @@
-import type { SimpleBookCard } from "../utils/types"
+import type { SimpleBookCard } from "../types/bookTypes"
 
 export default function BookCard({ title, description, image }: SimpleBookCard) {
     return (

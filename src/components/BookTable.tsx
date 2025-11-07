@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo } from 'react'
-import type { BookCatalog, Book } from '../utils/types';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import type { BookCatalog, Book } from '../types/bookTypes';
 import { getCatalog } from '../services/LibroServices';
-import { Link } from 'react-router-dom';
 import { DialogConfirm } from './DialogConfirm';
 import api from '../config/axios';
+import { handleCode } from '../features/codes/handleCode';
 
 
 // Componente Badge (sin cambios)
@@ -33,8 +34,18 @@ export default function BookTable() {
     const [selectedBook, setSelectedBook] = useState<Book['id'] | null>(null)
     const [searchTerm, setSearchTerm] = useState('');
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const code = searchParams.get("code");
+    if (code) {
+        handleCode(code)
+        searchParams.delete('code')
+        setSearchParams(searchParams)
+    }
+
+
     useEffect(() => {
         fetchCatalog()
+
     }, [])
     const fetchCatalog = async () => {
         setLoading(true)
@@ -98,6 +109,8 @@ export default function BookTable() {
             if (response.status === 204) {
                 fetchCatalog()
                 handleDialog()
+                handleCode('book_deleted')
+
             } else {
                 // Manejo de error, por ejemplo:
                 console.error('No se pudo borrar el registro', response);
@@ -135,7 +148,7 @@ export default function BookTable() {
                 <div className="flex justify-between items-center">
                     <h2 className="text-3xl font-extrabold text-gray-900">Gestión de Libros</h2>
                     <Link
-                        to='/admin/crearlibro'
+                        to='/admin/createbook'
                         className="boton_principal"
                     >
                         + Nuevo Libro
@@ -216,7 +229,7 @@ export default function BookTable() {
                                                 <div className="flex flex-col md:flex-row justify-center space-y-2 md:space-y-0 md:space-x-4">
                                                     <Link
                                                         className="w-full md:w-auto text-indigo-600 hover:text-indigo-900 font-medium transition duration-150 ease-in-out border border-indigo-200 py-1 px-3 rounded-md"
-                                                        to={`/admin/editarlibro/${book.id}`}
+                                                        to={`/admin/editbook/${book.id}`}
                                                     >
                                                         Editar
                                                     </Link>

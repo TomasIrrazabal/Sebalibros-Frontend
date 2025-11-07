@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import type { ClienteForm } from '../utils/types';
+import type { ClienteForm } from '../types/bookTypes';
 import MensajeError from '../components/MessageError';
 import axios from 'axios';
 import { useState } from 'react';

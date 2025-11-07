@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { Status, type BookFormEdit } from '../utils/types';
+import { Status, type BookFormEdit } from '../types/bookTypes';
 import MensajeError from './MessageError';
 import api from '../config/axios';
 import { getBookById } from '../services/LibroServices';
 import { getDifferences, publicUrl } from '../utils';
+import { toast } from 'sonner';
 
 
 const initialValues: BookFormEdit = {
@@ -64,8 +65,9 @@ export default function ModalEditBook() {
                 setBook(data)
                 reset(data)
             } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    setError(error.response?.data.error)
+                if (axios.isAxiosError(error) && error.response) {
+                    toast.error(error.response.data.error)
+
                 } else {
                     setError('Error desconocido')
                 }
@@ -117,7 +119,8 @@ export default function ModalEditBook() {
             }
 
             await api.patch('/admin/book', formData)
-            navigate('/admin');
+            navigate('/admin?code=book_updated')
+
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 setError(error.response?.data?.error || 'Error en la solicitud');

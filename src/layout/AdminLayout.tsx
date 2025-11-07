@@ -1,6 +1,21 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, Navigate } from 'react-router-dom'
+import { Toaster } from "sonner"
+import { useQuery } from '@tanstack/react-query';
+import { getUser } from '../api/SebaLibrosAPI';
 
 export default function AdminLayout() {
+
+
+    const { isLoading, isError } = useQuery({
+        queryFn: getUser,
+        queryKey: ['user'],
+        retry: 0,
+        refetchOnWindowFocus: false
+    })
+
+    if (isLoading) return 'Loading...'
+    if (isError) return <Navigate to={'/login'} />
+
     return (
         <>
             <div className='flex flex-col min-h-screen'>
@@ -21,8 +36,12 @@ export default function AdminLayout() {
                                 Inicio
                             </Link>
 
-                            <Link to='/catalogo' className='text-center rounded-sm w-24 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white hover:font-bold'>
+                            <Link to='/catalog' className='text-center rounded-sm w-24 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white hover:font-bold'>
                                 Catálogo
+                            </Link>
+
+                            <Link to='/admin/createuser' className='text-center rounded-sm w-24 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white hover:font-bold'>
+                                Crear Usuario
                             </Link>
 
                             <Link to='/admin' className='text-center rounded-sm w-10 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white '>
@@ -56,6 +75,9 @@ export default function AdminLayout() {
                     <h4 className='text-center text-base mt-2 '>Derechos reservados <i className='text-xl font-bold'>Sebastian Irrazabal</i></h4>
                 </footer>
             </div>
+
+            <Toaster position="top-right" />
+
 
         </>
     )

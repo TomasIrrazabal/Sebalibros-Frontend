@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom'
 
-import type { CatalogBookCard } from '../utils/types'
+import type { CatalogBookCard } from '../types/bookTypes'
 
 
 export default function CatalogBookCard(libro: CatalogBookCard) {
 
     return (
 
-        <Link to={`/catalogo/${libro.id}`} key={libro.id} className='px-4 shadow-xl'>
+        <Link to={`/catalog/${libro.id}`} key={libro.id} className='px-4 shadow-xl'>
             <div className='group relative overflow-hidden cursor-pointer'>
 
                 <img
