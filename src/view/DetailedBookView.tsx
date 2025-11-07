@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { type Book } from '../utils/types';
+import { type Book } from '../types/bookTypes';
 import axios from 'axios';
 import { publicUrl } from '../utils';
 import { getBookById } from '../services/LibroServices';
@@ -16,7 +16,7 @@ export default function DetailedBookView() {
 
 
     useEffect(() => {
-        const fetchLibros = async () => {
+        const fetchBooks = async () => {
             setLoading(true)
             try {
                 if (!id) {
@@ -48,7 +48,7 @@ export default function DetailedBookView() {
             }
         }
 
-        fetchLibros()
+        fetchBooks()
     }, [])
 
 

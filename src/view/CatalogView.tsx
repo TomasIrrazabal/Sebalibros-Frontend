@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react'
 import CatalogBookCard from '../components/CatalogBookCard';
-import { type BookCatalog, type Book, Status } from '../utils/types';
+import { type BookCatalog, type Book, Status } from '../types/bookTypes';
 import { publicUrl } from '../utils';
 import { getCatalog } from '../services/LibroServices';
 
 
 
 
-export default function CatalogoView() {
+export default function CatalogView() {
     const [Books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
 
     useEffect(() => {
-        const fetchCatalogo = async () => {
+        const fetchBooks = async () => {
             setLoading(true)
             setError(null)
 
@@ -40,7 +40,7 @@ export default function CatalogoView() {
             }
         }
 
-        fetchCatalogo()
+        fetchBooks()
     }, [])
 
 

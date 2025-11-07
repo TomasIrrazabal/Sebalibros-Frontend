@@ -1,6 +1,6 @@
 // supabase.ts
 import { createClient } from '@supabase/supabase-js'
-import { Status } from './types';
+import { Status } from '../types/bookTypes';
 
 export const supabase = createClient(
     import.meta.env.VITE_SUPABASE_URL!,

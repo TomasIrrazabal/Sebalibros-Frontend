@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { Status, type BookFormCreate } from '../utils/types';
+import { Status, type BookFormCreate } from '../types/bookTypes';
 import MensajeError from './MessageError';
 import api from '../config/axios';
+import { toast } from 'sonner';
 
 
 const initialValues: BookFormCreate = {
@@ -30,6 +31,7 @@ export default function ModalCreateBook() {
     const [imageFile, setImageFile] = useState<File | null>(null);
 
     const navigate = useNavigate()
+
 
 
 
@@ -62,7 +64,7 @@ export default function ModalCreateBook() {
 
                 await api.post('/admin/book', formData)
 
-                navigate('/admin')
+                navigate('/admin?code=book_created')
 
             } else {
                 throw new Error('Debe seleccionar una imagen.');
@@ -70,8 +72,8 @@ export default function ModalCreateBook() {
 
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                setError(error.response?.data.error)
+            if (axios.isAxiosError(error) && error.response) {
+                toast.error(error.response?.data.error)
             } else {
                 setError('Error desconocido')
             }
