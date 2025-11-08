@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import type { RegisterForm } from '../types/userTypes'
 import api from '../config/axios'
 import { isAxiosError } from 'axios'
@@ -17,6 +17,7 @@ function CreateUserCard() {
     const { register, handleSubmit, formState: { errors }, watch } = useForm({ defaultValues: initialValues })
 
     const password = watch('password')
+    const navigate = useNavigate()
 
     const handleRegister = async (formData: RegisterForm) => {
         try {
@@ -24,7 +25,7 @@ function CreateUserCard() {
             console.log(formData)
             const { data } = await api.post(`/admin/createuser`, formData)
             toast.success(data)
-
+            navigate('/admin')
         } catch (error) {
             if (isAxiosError(error) && error.response) {
                 toast.error(error.response.data.error)
