@@ -13,3 +13,15 @@ export async function getUser() {
         }
     }
 }
+
+export async function logout() {
+    try {
+        await api.get('/logout')
+        return true
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error)
+        }
+        throw error
+    }
+}
