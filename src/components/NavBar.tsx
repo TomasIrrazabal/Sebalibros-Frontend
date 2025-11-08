@@ -10,7 +10,7 @@ type Menu = {
 
 export function NavBar() {
   return (
-    <div className='sticky top-0 bg-red-50 md:flex md:justify-between mb-1 md:mb-0 '>
+    <div className='bg-gray-50 md:flex md:justify-between mb-1 md:mb-0 '>
 
       <Link to='/' className=' flex items-center flex-col p-1 md:flex-row md:gap-2'>
         <img
