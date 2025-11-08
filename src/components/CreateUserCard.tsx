@@ -107,18 +107,11 @@ function CreateUserCard() {
                 </div>
 
 
-
-
-
-
-
-
-
                 <div className="flex justify-end items-end gap-4">
 
                     <Link
                         className="text-center text-slate-800 text- border rounded-lg py-2 px-4"
-                        to="/"
+                        to="/admin"
                     >
                         Volver
                     </Link>

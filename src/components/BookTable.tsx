@@ -9,7 +9,7 @@ import { handleCode } from '../features/codes/handleCode';
 
 // Componente Badge (sin cambios)
 const StatusBadge = ({ status }: { status: string }) => {
-    const isActivo = status?.toLowerCase() === 'activo';
+    const isActivo = status?.toLowerCase() === 'active';
     const classes = isActivo
         ? 'bg-green-100 text-green-800'
         : 'bg-red-100 text-red-800';

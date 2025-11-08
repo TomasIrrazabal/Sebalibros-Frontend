@@ -1,35 +1,13 @@
 import { Link, Outlet } from 'react-router-dom'
+import { NavBar } from '../components/NavBar'
 
 export default function AppLayout() {
     return (
         <>
             <div className='flex flex-col min-h-screen'>
 
-                <header>
-                    <div className='bg-gray-50 md:flex md:justify-between mb-1 md:mb-0'>
-
-                        <Link to='/' className=' flex items-center flex-col p-1 md:flex-row md:gap-2'>
-                            <img
-                                src="/SebaLibros Logotipo.png" alt="Logotipo SebaLibros"
-                                className='max-w-2xs w-auto md:w-auto md:h-12 md:gap'
-                            />
-                            <span className='text-4xl font-bold text-(--color-violeta-principal) md:text-xl'>Seba Libros</span>
-                        </Link>
-                        <ul className='flex justify-between flex-col items-center md:flex-row *:mx-0.5'>
-
-                            <Link to='/' className='text-center rounded-sm w-24 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white hover:font-bold'>
-                                Inicio
-                            </Link>
-
-                            <Link to='/catalog' className='text-center rounded-sm w-24 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white hover:font-bold'>
-                                Catálogo
-                            </Link>
-
-                            <Link to='/admin' className='text-center rounded-sm w-10 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white '>
-                                <i className="fa-solid fa-user hover:text-white"></i>
-                            </Link>
-                        </ul>
-                    </div>
+                <header className='sticky top-0' >
+                    <NavBar />
                 </header>
 
                 <div className='flex-grow'>

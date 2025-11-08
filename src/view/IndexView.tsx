@@ -74,7 +74,7 @@ export default function InicioView() {
                 <div className='bg-[url("/hero.png")] min-h-[60vh] flex flex-col items-center justify-start text-center bg-cover bg-center bg-no-repeat'>
                     <h1 className='font-bold text-6xl text-white mt-15 '>Libros de Veterinaria</h1>
                     <p className='text-2xl text-white'>Encuentra los mejores libros para profesionales de la veterinaria</p>
-                    <Link to='/catalog' className='m-15 boton_principal'>Ver Libros</Link>
+                    <a href='#catalog' className='m-15 boton_principal'>Ver Libros</a>
                 </div>
 
                 <section className='flex flex-col items-center justify-center text-start border-b border-b-black/20 border-t-solid shadow-t-2xl shadow-t-black shadow-t-md contenedor  h-40'>
@@ -86,7 +86,7 @@ export default function InicioView() {
                     </div>
                 </section>
 
-                <div className='flex flex-col items-center text-start'>
+                <div className='flex flex-col items-center text-start' id='catalog'>
                     <h2 className='font-bold mt-4 text-2xl'>Nuestros Libros Más Populares</h2>
                     <p className='mb-1 text-black/70'>Explora nuestra colección repleta de textos esenciales</p>
                     <section >
