@@ -168,18 +168,23 @@ export function NavBarAdmin() {
   const navigate = useNavigate()
 
   const MenusAdmin: Menu[] = [
-    {
-      label: 'Inicio',
-      to: '/'
-    },
-    {
-      label: 'Catálogo',
-      to: '/catalog'
-    },
+    // {
+    //   label: 'Inicio',
+    //   to: '/'
+    // },
+    // {
+    //   label: 'Catálogo',
+    //   to: '/catalog'
+    // },
     {
       label: 'Libros',
       to: '/admin'
     },
+    {
+      label: 'API Docs',
+      to: '/docs'
+    },
+
     {
       label: 'Usuarios',
       items: [
@@ -187,7 +192,6 @@ export function NavBarAdmin() {
         { label: 'Cerrar Sesion', to: '/admin/cerrarsesion' }
       ]
     },
-
   ]
 
   useEffect(() => {

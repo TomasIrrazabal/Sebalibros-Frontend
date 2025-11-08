@@ -1,5 +1,6 @@
 import { Link, Outlet } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
+import { Toaster } from 'sonner'
 
 export default function AppLayout() {
     return (
@@ -35,6 +36,7 @@ export default function AppLayout() {
                     <h4 className='text-center text-base mt-2 '>Derechos reservados <i className='text-xl font-bold'>Sebastian Irrazabal</i></h4>
                 </footer>
             </div>
+            <Toaster position="top-right" />
 
         </>
     )
