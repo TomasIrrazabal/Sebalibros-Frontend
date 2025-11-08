@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { Status, type BookFormCreate } from '../types/bookTypes';
-import MensajeError from './MessageError';
+import MessageError from './MessageError';
 import api from '../config/axios';
 import { toast } from 'sonner';
 
@@ -150,7 +150,7 @@ export default function ModalCreateBook() {
 
                                 {...register('title', { required: 'El título es obligatorio.' })}
                             />
-                            {errors.title && <MensajeError>{errors.title.message}</MensajeError>}
+                            {errors.title && <MessageError>{errors.title.message}</MessageError>}
                         </div>
 
                         {/* Autor */}
@@ -163,7 +163,7 @@ export default function ModalCreateBook() {
                                 className="bg-slate-100 border border-slate-500 p-3 rounded-lg placeholder-slate-400"
                                 {...register('author', { required: 'El autor es obligatorio.' })}
                             />
-                            {errors.author && <MensajeError>{errors.author.message}</MensajeError>}
+                            {errors.author && <MessageError>{errors.author.message}</MessageError>}
                         </div>
 
                         {/* Precio */}
@@ -180,7 +180,7 @@ export default function ModalCreateBook() {
                                     min: { value: 1, message: 'El precio debe ser mayor a 1.' }
                                 })}
                             />
-                            {errors.price && <MensajeError>{errors.price.message}</MensajeError>}
+                            {errors.price && <MessageError>{errors.price.message}</MessageError>}
                         </div>
 
                         {/* ISBN */}
@@ -193,7 +193,7 @@ export default function ModalCreateBook() {
                                 {...register('isbn', { required: 'El isbn es obligatorio.' })}
 
                             />
-                            {errors.isbn && <MensajeError>{errors.isbn.message}</MensajeError>}
+                            {errors.isbn && <MessageError>{errors.isbn.message}</MessageError>}
 
                         </div>
                         {/* Paginas */}
@@ -209,7 +209,7 @@ export default function ModalCreateBook() {
                                     min: { value: 1, message: 'Las páginas deben ser mayor a 1.' }
                                 })}
                             />
-                            {errors.pages && <MensajeError>{errors.pages.message}</MensajeError>}
+                            {errors.pages && <MessageError>{errors.pages.message}</MessageError>}
                         </div>
 
                         {/* Estado */}
@@ -278,7 +278,7 @@ export default function ModalCreateBook() {
                                 })}
                                 onChange={handleImageChange}
                             />
-                            {errors.image && <MensajeError>{errors.image.message}</MensajeError>}
+                            {errors.image && <MessageError>{errors.image.message}</MessageError>}
                             {imageFile && (
                                 <img
                                     src={URL.createObjectURL(imageFile)}

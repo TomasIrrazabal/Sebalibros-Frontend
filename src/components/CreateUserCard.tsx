@@ -25,7 +25,7 @@ function CreateUserCard() {
             console.log(formData)
             const { data } = await api.post(`/admin/createuser`, formData)
             toast.success(data)
-            navigate('/admin')
+            navigate('/admin=user_created')
         } catch (error) {
             if (isAxiosError(error) && error.response) {
                 toast.error(error.response.data.error)
