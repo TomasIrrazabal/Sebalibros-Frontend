@@ -46,7 +46,7 @@ export default function AdminLayout() {
                             <a className='items-center' href="https://www.instagram.com/seba.libros"><i className='fab fa-instagram'></i></a>
                         </div>
                     </div>
-                    <h4 className='text-center text-base mt-2 '>Derechos reservados <i className='text-xl font-bold'>Sebastian Irrazabal</i></h4>
+                    <h4 className='text-center text-base mt-2 '>Derechos reservados <i className='text-xl font-bold'>Sebastian Irrazabal </i></h4>
                 </footer>
             </div>
 

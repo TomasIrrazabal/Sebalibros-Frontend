@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { toast } from 'sonner';
 
 
 import api from '../config/axios';
@@ -59,12 +60,15 @@ export default function InicioView() {
 
     if (error) {
         return (
-            <div className="p-8">
-                <div role="alert" className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                    <p className="font-bold">Error de Carga</p>
-                    <p>{error}</p>
-                </div>
-            </div>
+            <>
+                {toast.error(`Error de carga` + `\nerror`)}
+            </>
+            // <div className="p-8">
+            //     <div role="alert" className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            //         <p className="font-bold">Error de Carga</p>
+            //         <p>{error}</p>
+            //     </div>
+            // </div>
         )
     }
 

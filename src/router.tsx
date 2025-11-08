@@ -10,6 +10,7 @@ import ModalCreateBook from './components/ModalCreateBook'
 import AuthLayout from './layout/AuthLayout'
 import LoginView from './view/LoginView'
 import CreateUserCard from './components/CreateUserCard'
+import ApiDocs from './view/ApiDocs'
 
 
 export default function Router() {
@@ -20,6 +21,7 @@ export default function Router() {
                     <Route path='/' element={<IndexView />} />
                     <Route path='/catalog' element={<CatalogView />} />
                     <Route path='/catalog/:id' element={<DetailedBookView />} />
+
                 </Route>
 
                 <Route element={<AuthLayout />}>
@@ -31,6 +33,7 @@ export default function Router() {
                     <Route path='/admin/editbook/:id' element={<ModalEditBook />} />
                     <Route path='/admin/createbook' element={<ModalCreateBook />} />
                     <Route path='/admin/createuser' element={<CreateUserCard />} />
+                    <Route path='/docs' element={<ApiDocs />} />
                 </Route>
             </Routes>
         </BrowserRouter>
