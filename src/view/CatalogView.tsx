@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import CatalogBookCard from '../components/CatalogBookCard';
 import { type BookCatalog, type Book, Status } from '../types/bookTypes';
 import { publicUrl } from '../utils';
-import { getCatalog } from '../services/LibroServices';
+import { getCatalog } from '../services/bookServices';
 
 
 

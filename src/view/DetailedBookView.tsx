@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { type Book } from '../types/bookTypes';
 import axios from 'axios';
 import { publicUrl } from '../utils';
-import { getBookById } from '../services/LibroServices';
+import { getBookById } from '../services/bookServices';
 
 export default function DetailedBookView() {
     const [book, setBook] = useState<Book | null>(null);

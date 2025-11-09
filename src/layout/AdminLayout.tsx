@@ -1,58 +1,33 @@
-import { Link, Outlet, Navigate } from 'react-router-dom'
-import { Toaster } from "sonner"
+import { Navigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from '../api/SebaLibrosAPI';
-import { NavBarAdmin } from '../components/NavBar';
+import AdminView from '../components/AdminView';
+import { useEffect } from 'react';
+
 
 export default function AdminLayout() {
 
 
-    const { isLoading, isError } = useQuery({
+    const { data, isLoading, isError, refetch } = useQuery({
         queryFn: getUser,
         queryKey: ['user'],
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
         retry: 0,
-        refetchOnWindowFocus: false
+        staleTime: Infinity,
     })
+
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.pathname.startsWith('/admin')) {
+            refetch();
+        }
+    }, [location.key, location.pathname, refetch]);
 
     if (isLoading) return 'Loading...'
     if (isError) return <Navigate to={'/login'} />
+    if (data) return <AdminView data={data} />
 
-    return (
-        <>
-            <div className='flex flex-col min-h-screen'>
-
-                <header className='sticky top-0'>
-                    <NavBarAdmin />
-                </header>
-
-                <div className='flex-grow'>
-                    <Outlet />
-
-                </div>
-
-
-
-                <footer className=' bg-(--color-violeta-principal) py-2 text-white '>
-                    <div className='md:grid md:grid-cols-2 mt-4'>
-                        <ul className='flex justify-between flex-col items-center  '>
-                            <Link to='/' className='text-center rounded-sm hover:bg-white hover:text-black hover:font-bold w-24'>
-                                Inicio
-                            </Link>
-                            <Link to='/catalogo' className='text-center rounded-sm hover:bg-white hover:text-black hover:font-bold w-24 '>
-                                Catálogo
-                            </Link>
-                        </ul>
-                        <div className='text-center mt-8  '>
-                            <a className='items-center' href="https://www.instagram.com/seba.libros"><i className='fab fa-instagram'></i></a>
-                        </div>
-                    </div>
-                    <h4 className='text-center text-base mt-2 '>Derechos reservados <i className='text-xl font-bold'>Sebastian Irrazabal </i></h4>
-                </footer>
-            </div>
-
-            <Toaster position="top-right" />
-
-
-        </>
-    )
 }

@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import type { RegisterForm } from '../types/userTypes'
+import { Role, type RegisterForm } from '../types/userTypes'
 import api from '../config/axios'
 import { isAxiosError } from 'axios'
 import { toast } from 'sonner'
@@ -10,6 +10,7 @@ function CreateUserCard() {
     const initialValues: RegisterForm = {
         name: '',
         email: '',
+        role: Role.editor,
         password: '',
         password_confirmation: ''
     }
@@ -21,11 +22,9 @@ function CreateUserCard() {
 
     const handleRegister = async (formData: RegisterForm) => {
         try {
+            await api.post(`/admin/createuser`, formData)
+            navigate('/admin?code=user_created')
 
-            console.log(formData)
-            const { data } = await api.post(`/admin/createuser`, formData)
-            toast.success(data)
-            navigate('/admin=user_created')
         } catch (error) {
             if (isAxiosError(error) && error.response) {
                 toast.error(error.response.data.error)
@@ -33,14 +32,17 @@ function CreateUserCard() {
         }
     }
 
-    return (
-        <>
+    const roleOptions = Object.values(Role);
 
-            <h1 className='text-4xl text-black  '>Crear Usuario</h1>
+
+    return (
+        <div className="p-2  bg-gray-50 min-h-screen flex flex-col items-center">
+
+            <h1 className='text-3xl font-extrabold text-gray-900 '>Crear Usuario</h1>
 
             <form
                 onSubmit={handleSubmit(handleRegister)}
-                className='bg-white px-5 py-20 rounded-lg space-y-10 mt-10 text-start'
+                className='bg-white px-5 py-20 rounded-lg space-y-10 mt-10 text-start max-w-200 md:min-w-180'
             >
                 <div className="grid grid-cols-1 space-y-3">
                     <label htmlFor="name" className="text-2xl text-slate-500">Nombre</label>
@@ -73,6 +75,18 @@ function CreateUserCard() {
                     {errors.email && (
                         <MessageError>{errors.email.message}</MessageError>
                     )}
+                </div>
+                <div className='grid grid-cols-1 space-y-3'>
+                    <label htmlFor="estado" className="text-2xl text-slate-600">Estado</label>
+                    <select
+                        id="estado"
+                        className="bg-slate-100 border-1 border-slate-300 p-3 rounded-lg placeholder-slate-400"
+                        {...register('role')}
+                    >
+                        {roleOptions.map(role => (
+                            <option key={role} value={role}>{role.charAt(0).toUpperCase() + role.slice(1)}</option>
+                        ))}
+                    </select>
                 </div>
                 <div className="grid grid-cols-1 space-y-3">
                     <label htmlFor="password" className="text-2xl text-slate-500">Password</label>
@@ -126,7 +140,7 @@ function CreateUserCard() {
                 </div>
 
             </form>
-        </>
+        </div>
     )
 }
 

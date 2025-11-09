@@ -1,14 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { logout } from '../api/SebaLibrosAPI'
+import { Role, type User } from '../types/userTypes';
+import { hasAtLeast } from '../utils/roles';
+import { useQueryClient } from '@tanstack/react-query';
 
 type Menu = {
   label: string;
-  items?: { label: string; to: string }[];
+  items?: { label: string; to: string, minRole: Role }[];
   to?: string; // por si también querés que el padre sea clickeable
 };
 
-
+type AdminMenu = Menu & { minRole: Role }
 
 
 
@@ -23,11 +26,11 @@ export function NavBar() {
   const MenusIndex: Menu[] = [
     {
       label: 'Inicio',
-      to: '/'
+      to: '/',
     },
     {
       label: 'Catálogo',
-      to: '/catalog'
+      to: '/catalog',
     }
   ]
 
@@ -124,7 +127,7 @@ export function NavBar() {
                         className='block w-full whitespace-nowrap rounded-sm px-4 py-2 text-left hover:bg-(--color-violeta-principal) hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-violeta-principal)'
                         tabIndex={0}
                         onClick={async (e) => {
-                          if (item.to.endsWith('/cerrarsesion')) {
+                          if (item.to.endsWith('/logout')) {
                             e.preventDefault()
                             try {
                               await logout()
@@ -167,32 +170,38 @@ export function NavBarAdmin() {
   const dropdownRefs = useRef<Record<string, HTMLUListElement | null>>({})
   const navigate = useNavigate()
 
-  const MenusAdmin: Menu[] = [
-    // {
-    //   label: 'Inicio',
-    //   to: '/'
-    // },
-    // {
-    //   label: 'Catálogo',
-    //   to: '/catalog'
-    // },
+  const MenusAdmin: AdminMenu[] = [
     {
       label: 'Libros',
-      to: '/admin'
+      to: '/admin',
+      minRole: Role.editor,
+      items: [
+        {
+          label: 'Crear Libro', to: '/admin/createbook', minRole: Role.editor as const
+        }
+      ]
     },
     {
       label: 'API Docs',
-      to: '/docs'
+      to: '/docs',
+      minRole: Role.admin
+
     },
 
     {
       label: 'Usuarios',
       items: [
-        { label: 'Crear Usuario', to: '/admin/createuser' },
-        { label: 'Cerrar Sesion', to: '/admin/cerrarsesion' }
-      ]
+        { label: 'Ver Usuarios', to: '/admin/users', minRole: Role.admin as const },
+        { label: 'Crear Usuario', to: '/admin/createuser', minRole: Role.admin as const },
+        { label: 'Modificar Cuenta', to: '/updateacount', minRole: Role.editor as const },
+        { label: 'Cerrar Sesion', to: '/admin/logout', minRole: Role.editor as const },
+      ],
+      minRole: Role.editor
+
     },
   ]
+  const queryClient = useQueryClient()
+  const user: User = queryClient.getQueryData(['user'])!
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -222,7 +231,7 @@ export function NavBarAdmin() {
     }
   }, [open])
   return (
-    <div ref={navRef} className='bg-gray-50 md:flex md:justify-between mb-1 md:mb-0 pr-4 md:pr-8'>
+    <div ref={navRef} className='bg-gray-50 md:flex md:justify-between mb-1 md:mb-0 pr-4 md:pr-8 '>
 
       <Link to='/' className=' flex items-center flex-col p-1 md:flex-row md:gap-2'>
         <img
@@ -235,97 +244,85 @@ export function NavBarAdmin() {
 
       <ul className='flex justify-between flex-col items-center md:flex-row *:mx-0.5'>
 
-        {/* <Link to='/' className='text-center rounded-sm w-24 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white hover:font-bold'>
-          Inicio
-        </Link>
-
-        <Link to='/catalog' className='text-center rounded-sm w-24 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white hover:font-bold'>
-          Catálogo
-        </Link>
-
-        <Link to='/admin/createuser' className='text-center rounded-sm w-24 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white hover:font-bold'>
-          Crear Usuario
-        </Link>
-
-        <Link to='/admin' className='text-center rounded-sm w-10 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white '>
-          <i className="fa-solid fa-user hover:text-white"></i>
-        </Link> */}
-
         {/* Menús */}
-        {MenusAdmin.map((menu) => {
-          const isOpen = open === menu.label
-          const menuId = `menu-${menu.label.replace(/\s+/g, '-')}`
-          return (
-            <li key={menu.label} className="relative" role="none">
-              {/* Botón/Link padre */}
-              {menu.items ? (
-                <button
-                  type='button'
-                  className='text-center rounded-sm w-auto min-w-15 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white '
-                  aria-haspopup='menu'
-                  aria-expanded={isOpen}
-                  aria-controls={menuId}
-                  onClick={(e) => {
-                    const next = isOpen ? null : menu.label
-                    setOpen(next)
-                    const triggerRect = (e.currentTarget as HTMLElement).getBoundingClientRect()
-                    const minWidth = 192 // Tailwind min-w-48
-                    setAlignRight(triggerRect.left + minWidth > window.innerWidth)
-                  }}
-                  onKeyDown={(e) => { if (e.key === 'Escape') setOpen(null) }}
-                >
-                  {menu.label}
-                </button>
-              ) : menu.to ? (
-                <Link
-                  to={menu.to}
-                  className='text-center rounded-sm w-auto min-w-15 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white '
-                  onClick={() => setOpen(null)}
-                >
-                  {menu.label}
-                </Link>
-              ) : (
-                <span className='text-center rounded-sm w-auto min-w-15 md:p-2'>{menu.label}</span>
-              )}
+        {MenusAdmin
+          .filter(menu => hasAtLeast(user.role, menu.minRole))
+          .map((menu) => {
+            const isOpen = open === menu.label
+            const menuId = `menu-${menu.label.replace(/\s+/g, '-')}`
+            return (
+              <li key={menu.label} className="relative" role="none">
+                {/* Botón/Link padre */}
+                {menu.items ? (
+                  <button
+                    type='button'
+                    className='text-center rounded-sm w-auto min-w-15 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white '
+                    aria-haspopup='menu'
+                    aria-expanded={isOpen}
+                    aria-controls={menuId}
+                    onClick={(e) => {
+                      const next = isOpen ? null : menu.label
+                      setOpen(next)
+                      const triggerRect = (e.currentTarget as HTMLElement).getBoundingClientRect()
+                      const minWidth = 192 // Tailwind min-w-48
+                      setAlignRight(triggerRect.left + minWidth > window.innerWidth)
+                    }}
+                    onKeyDown={(e) => { if (e.key === 'Escape') setOpen(null) }}
+                  >
+                    {menu.label}
+                  </button>
+                ) : menu.to ? (
+                  <Link
+                    to={menu.to}
+                    className='text-center rounded-sm w-auto min-w-15 md:p-2 hover:bg-(--color-violeta-principal) hover:text-white hover:border-white '
+                    onClick={() => setOpen(null)}
+                  >
+                    {menu.label}
+                  </Link>
+                ) : (
+                  <span className='text-center rounded-sm w-auto min-w-15 md:p-2'>{menu.label}</span>
+                )}
 
-              {/* Dropdown por click */}
-              {menu.items && (
-                <ul
-                  id={menuId}
-                  ref={(el) => { dropdownRefs.current[menuId] = el }}
-                  role="menu"
-                  className={`absolute ${alignRight ? 'right-0' : 'left-0'} mt-1 ${isOpen ? 'block' : 'hidden'} min-w-48 rounded-md border border-slate-200 bg-white text-slate-900 shadow-lg z-50 p-1 space-y-1`}
-                >
-                  {menu.items.map((item) => (
-                    <li key={item.to} role="none">
-                      <Link
-                        to={item.to}
-                        role="menuitem"
-                        className='block w-full whitespace-nowrap rounded-sm px-4 py-2 text-left hover:bg-(--color-violeta-principal) hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-violeta-principal)'
-                        tabIndex={0}
-                        onClick={async (e) => {
-                          if (item.to.endsWith('/cerrarsesion')) {
-                            e.preventDefault()
-                            try {
-                              await logout()
-                            } finally {
-                              setOpen(null)
-                              navigate('/')
-                            }
-                          } else {
-                            setOpen(null)
-                          }
-                        }}
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          )
-        })}
+                {/* Dropdown por click */}
+                {menu.items && (
+                  <ul
+                    id={menuId}
+                    ref={(el) => { dropdownRefs.current[menuId] = el }}
+                    role="menu"
+                    className={`absolute ${alignRight ? 'right-0' : 'left-0'} mt-1 ${isOpen ? 'block' : 'hidden'} min-w-48 rounded-md border border-slate-200 bg-white text-slate-900 shadow-lg z-50 p-1 space-y-1`}
+                  >
+                    {menu.items
+                      .filter(item => hasAtLeast(user.role, item.minRole))
+                      .map((item) => (
+                        <li key={item.to} role="none">
+                          <Link
+                            to={item.to}
+                            role="menuitem"
+                            className='block w-full whitespace-nowrap rounded-sm px-4 py-2 text-left hover:bg-(--color-violeta-principal) hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-violeta-principal)'
+                            tabIndex={0}
+                            onClick={async (e) => {
+                              if (item.to.endsWith('/logout')) {
+                                e.preventDefault()
+                                try {
+                                  await logout()
+                                } finally {
+                                  setOpen(null)
+                                  navigate('/')
+                                }
+                              } else {
+                                setOpen(null)
+                              }
+                            }}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                  </ul>
+                )}
+              </li>
+            )
+          })}
       </ul>
 
     </div>

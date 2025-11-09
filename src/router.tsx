@@ -11,14 +11,17 @@ import AuthLayout from './layout/AuthLayout'
 import LoginView from './view/LoginView'
 import CreateUserCard from './components/CreateUserCard'
 import ApiDocs from './view/ApiDocs'
+import UpdateAcount from './components/UpdateAcount'
+import UsersTable from './components/UsersTable'
+import ModalUpdateAcount from './components/ModalUpdateAcount'
 
 
 export default function Router() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route element={<AppLayout />}>
-                    <Route path='/' element={<IndexView />} />
+                <Route path={'/'} element={<AppLayout />}>
+                    <Route index={true} element={<IndexView />} />
                     <Route path='/catalog' element={<CatalogView />} />
                     <Route path='/catalog/:id' element={<DetailedBookView />} />
 
@@ -33,6 +36,11 @@ export default function Router() {
                     <Route path='/admin/editbook/:id' element={<ModalEditBook />} />
                     <Route path='/admin/createbook' element={<ModalCreateBook />} />
                     <Route path='/admin/createuser' element={<CreateUserCard />} />
+
+                    <Route path='/updateacount' element={<UpdateAcount />} />
+                    <Route path='/admin/users' element={<UsersTable />} />
+                    <Route path='/admin/edituser/:id' element={<ModalUpdateAcount />} />
+
                     <Route path='/docs' element={<ApiDocs />} />
                 </Route>
             </Routes>

@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Status, type BookFormEdit } from '../types/bookTypes';
 import MensajeError from './MessageError';
 import api from '../config/axios';
-import { getBookById } from '../services/LibroServices';
+import { getBookById } from '../services/bookServices';
 import { getDifferences, publicUrl } from '../utils';
 import { toast } from 'sonner';
 
@@ -47,7 +47,7 @@ export default function ModalEditBook() {
 
     useEffect(() => {
 
-        const fetchLibros = async () => {
+        const fetchBook = async () => {
             setLoading(true)
             try {
                 if (!id) {
@@ -76,7 +76,7 @@ export default function ModalEditBook() {
             }
         }
 
-        fetchLibros()
+        fetchBook()
 
     }, [id, reset]);
 
@@ -142,7 +142,7 @@ export default function ModalEditBook() {
         }
     };
 
-    const estadoOptions = Object.values(Status);
+    const stateOptions = Object.values(Status);
 
     if (loading) {
         return (
@@ -273,7 +273,7 @@ export default function ModalEditBook() {
                                 // value={book.state}
                                 {...register('state')}
                             >
-                                {estadoOptions.map(state => (
+                                {stateOptions.map(state => (
                                     <option key={state} value={state}>{state.charAt(0).toUpperCase() + state.slice(1)}</option>
                                 ))}
                             </select>

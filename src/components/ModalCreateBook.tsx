@@ -92,7 +92,7 @@ export default function ModalCreateBook() {
     };
 
 
-    const estadoOptions = Object.values(Status);
+    const stateOptions = Object.values(Status);
 
     if (loading) {
         return (
@@ -220,7 +220,7 @@ export default function ModalCreateBook() {
                                 className="bg-slate-100 border border-slate-500 p-3 rounded-lg"
                                 {...register('state')}
                             >
-                                {estadoOptions.map(state => (
+                                {stateOptions.map(state => (
                                     <option key={state} value={state}>{state.charAt(0).toUpperCase() + state.slice(1)}</option>
                                 ))}
                             </select>
