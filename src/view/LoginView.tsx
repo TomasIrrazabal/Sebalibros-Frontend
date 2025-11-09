@@ -18,6 +18,7 @@ function LoginView() {
 
     const login = useMutation({
         mutationFn: (body: { email: string, password: string }) =>
+
             api.post('/login', body),
         onError: (error) => {
             if (isAxiosError(error) && error.response) {
@@ -29,7 +30,7 @@ function LoginView() {
 
 
     return (
-        <>
+        <div className='flex flex-col items-center'>
             <h1 className='text-4xl text-white  '>Iniciar Sesión</h1>
 
             <form
@@ -41,7 +42,7 @@ function LoginView() {
                         password: String(form.get('password'))
                     })
                 }}
-                className='bg-white px-5 py-20 rounded-lg space-y-10 mt-10 text-start'
+                className='bg-white px-5 py-20 rounded-lg space-y-10 mt-10 text-start max-w-200 md:min-w-120'
             >
                 <div className="grid grid-cols-1 space-y-3 ">
                     <label htmlFor="email" className="text-2xl text-slate-600">E-mail</label>
@@ -96,7 +97,7 @@ function LoginView() {
                 </div>
 
             </form>
-        </>
+        </div>
     )
 }
 

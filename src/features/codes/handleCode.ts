@@ -44,6 +44,15 @@ export function handleCode(code: string) {
                 }
             });
             break;
+        case CodeType.USER_UPDATED:
+            toast.success('Usuario modificado correctamente', {
+                style: {
+                    background: "#E6F6E6",
+                    color: "#1A7F37",
+                    border: "1px solid #B2E3B2"
+                }
+            });
+            break;
 
         case CodeType.ERROR:
             toast.error("Error ❌", {

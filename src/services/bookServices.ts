@@ -8,15 +8,15 @@ export async function getCatalog(): Promise<BookCatalog> {
     try {
         const { data } = await api.get<BookCatalog>("/books");
 
-        if (!data) throw new Error("Respuesta vacía del servidor");
+        if (!data) throw new Error("Empty Server Response");
         return data;
 
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            const msg = error.response?.data?.error || "Error de red o servidor";
+            const msg = error.response?.data?.error || "Connection Error";
             throw new Error(msg);
         } else {
-            throw new Error("Error desconocido al obtener el catálogo");
+            throw new Error("Unknown error fetching catalog");
         }
     }
 };

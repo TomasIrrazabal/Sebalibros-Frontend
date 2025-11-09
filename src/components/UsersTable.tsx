@@ -1,37 +1,20 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router-dom';
-import type { BookCatalog, Book } from '../types/bookTypes';
-import { getCatalog } from '../services/bookServices';
 import { DialogConfirm } from './DialogConfirm';
 import api from '../config/axios';
 import { handleCode } from '../features/codes/handleCode';
+import type { User } from '../types/userTypes';
+import { getAllUsers } from '../api/SebaLibrosAPI';
 
 
-// Componente Badge (sin cambios)
-const StatusBadge = ({ status }: { status: string }) => {
-    const isActive = status?.toLowerCase() === 'active';
-    const classes = isActive
-        ? 'bg-green-100 text-green-800'
-        : 'bg-red-100 text-red-800';
 
-    return (
-        <span
-            className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${classes}`}
-        >
-            {status}
-        </span>
-    );
-}
-
-
-export default function BookTable() {
-    // ESTADO BASE DE DATOS (Lista inmutable que contiene todos los libros)
-    const [books, setbooks] = useState<Book[]>([]);
+export default function UsersTable() {
+    const [users, setusers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const [showDialog, setShowDialog] = useState(false)
-    const [selectedBook, setSelectedBook] = useState<Book['id'] | null>(null)
+    const [selectedUser, setSelectedUser] = useState<User['id'] | null>(null)
     const [searchTerm, setSearchTerm] = useState('');
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -44,60 +27,59 @@ export default function BookTable() {
 
 
     useEffect(() => {
-        fetchCatalog()
+        fetchUsers()
 
     }, [])
-    const fetchCatalog = async () => {
+    const fetchUsers = async () => {
         setLoading(true)
         setError(null)
         try {
-            const data = await getCatalog();
+            const data = await getAllUsers();
 
-            if (data && data.books) {
-                setbooks(data.books);
-            } else {
-                setbooks((data as BookCatalog)?.books || []);
+            if (data && data.users) {
+                setusers(data.users);
             }
+
         } catch (error) {
             if (error instanceof Error) {
                 setError(error.message)
             } else {
-                setError('Unknown error loading books')
+                setError('Error desconocido al cargar los libros')
             }
         } finally {
             setLoading(false)
         }
     }
 
-    const filteredLibros = useMemo(() => {
+    const filteredUser = useMemo(() => {
         const term = searchTerm.trim().toLowerCase();
 
         if (!term) {
-            return books;
+            return users;
         }
 
-        return books.filter(book => {
+        return users.filter(user => {
             // 1. Filtro por ID (convertido a string para la búsqueda)
-            const idMatch = String(book.id).includes(term);
+            const idMatch = String(user.id).includes(term);
 
             // 2. Filtro por Título
-            const tituloMatch = book.title.toLowerCase().includes(term);
+            const nameMatch = user.name.toLowerCase().includes(term);
 
             // 3. Filtro por Autor
-            const autorMatch = book.author.toLowerCase().includes(term);
+            const emailMatch = user.email.toLowerCase().includes(term);
 
-            return idMatch || tituloMatch || autorMatch;
+            return idMatch || nameMatch || emailMatch;
         });
 
-    }, [books, searchTerm]); // Se recalcula cuando la lista original o el término cambian
+    }, [users, searchTerm]); // Se recalcula cuando la lista original o el término cambian
 
     const handleDialog = (id?: number) => {
         if (id) {
             setShowDialog(true)
-            setSelectedBook(id)
+            setSelectedUser(id)
         } else {
             setShowDialog(false)
-            setSelectedBook(0)
+            setSelectedUser(0)
         }
     }
 
@@ -107,7 +89,7 @@ export default function BookTable() {
             const response = await api.delete(`/admin/book/${id}`)
 
             if (response.status === 204) {
-                fetchCatalog()
+                fetchUsers()
                 handleDialog()
                 handleCode('book_deleted')
 
@@ -124,7 +106,7 @@ export default function BookTable() {
     if (loading) {
         return (
             <div className="flex justify-center items-center p-12 h-64">
-                <p className="text-2xl font-semibold text-indigo-600 animate-pulse">Cargando libros...</p>
+                <p className="text-2xl font-semibold text-indigo-600 animate-pulse">Cargando Usuarios...</p>
             </div>
         )
     }
@@ -146,13 +128,14 @@ export default function BookTable() {
 
             <div className="mb-6 space-y-4">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-3xl font-extrabold text-gray-900">Gestión de Libros</h2>
+                    <h2 className="text-3xl font-extrabold text-gray-900">Gestión de Usuarios</h2>
+
                 </div>
 
                 {/* Campo de búsqueda: Ahora busca en ID, Título y Autor */}
                 <input
                     type="text"
-                    placeholder={`Buscar entre ${books.length} libros (ID, Título o Autor)...`}
+                    placeholder={`Buscar entre ${users.length} Usuarios (ID, Nombre o Email)...`}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full p-3 text-gray-800 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150"
@@ -172,50 +155,40 @@ export default function BookTable() {
                                         {/* ID: Visible en móvil y desktop */}
                                         <th className="px-3 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">ID</th>
                                         {/* ISBN: Visible en móvil y desktop (oculto en pantallas xs) */}
-                                        <th className="px-3 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider hidden sm:table-cell">ISBN</th>
-                                        <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Título</th>
+
+                                        <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Nombre</th>
                                         {/* Autor y Estado: Oculto en móvil, visible en sm+ */}
-                                        <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Autor</th>
-                                        <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Estado</th>
+                                        <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Email</th>
+                                        <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider hidden sm:table-cell">Role</th>
                                         <th className="relative px-6 py-3 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">Acciones</th>
                                     </tr>
                                 </thead>
 
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {/* Iteramos sobre la lista FILTRADA: filteredLibros */}
-                                    {filteredLibros.map((book) => (
+                                    {filteredUser.map((user) => (
                                         <tr
-                                            key={book.id}
+                                            key={user.id}
                                             className="block md:table-row hover:bg-indigo-50/50 transition duration-150 ease-in-out border-b md:border-none p-4 md:p-0"
                                         >
                                             {/* ID: VISIBLE EN MÓVIL Y DESKTOP */}
                                             <td className="block md:table-cell px-3 py-2 md:px-6 md:py-4 text-left text-xs font-bold text-gray-900">
                                                 <span className="md:hidden text-xs text-gray-500 uppercase font-medium block">ID:</span>
-                                                {book.id}
+                                                {user.id}
                                             </td>
 
-                                            {/* ISBN: VISIBLE EN SM+ y ajustado para el layout móvil */}
-                                            <td className="block sm:table-cell px-3 py-2 md:px-6 md:py-4 text-left text-xs text-gray-500">
-                                                <span className="sm:hidden text-xs text-gray-500 uppercase font-medium block">ISBN:</span>
-                                                {book.isbn}
-                                            </td>
-
-                                            {/* Título: Visible en móvil y desktop */}
+                                            {/* Nombre: Visible en móvil y desktop */}
                                             <td className="block md:table-cell px-2 py-2 md:px-6 md:py-4 text-left text-gray-900 font-bold md:font-semibold">
-                                                <span className="md:hidden text-xs text-gray-500 uppercase font-medium block">Título:</span>
-                                                {book.title}
+                                                <span className="md:hidden text-xs text-gray-500 uppercase font-medium block">Nombre:</span>
+                                                {user.name}
                                             </td>
-
-                                            {/* Autor: Oculto en móvil, visible en sm+ */}
-                                            <td className=" sm:table-cell px-2 py-1 md:px-6 md:py-4 text-left text-sm text-gray-500">
-                                                {book.author}
+                                            <td className="block md:table-cell px-2 py-2 md:px-6 md:py-4 text-left text-gray-900 font-bold md:font-semibold">
+                                                <span className="md:hidden text-xs text-gray-500 uppercase font-medium block">Email:</span>
+                                                {user.email}
                                             </td>
-
-                                            {/* Estado: Oculto en móvil, visible en sm+ */}
-                                            <td className=" sm:table-cell px-2 py-1 md:px-6 md:py-4 text-left text-sm">
-                                                <div className="md:inline-block">
-                                                    <StatusBadge status={book.state} />
-                                                </div>
+                                            <td className="block md:table-cell px-2 py-2 md:px-6 md:py-4 text-left text-gray-900 font-bold md:font-semibold">
+                                                <span className="md:hidden text-xs text-gray-500 uppercase font-medium block">Rol:</span>
+                                                {user.role}
                                             </td>
 
                                             {/* Acciones (Ajustado para mejor móvil) */}
@@ -223,13 +196,13 @@ export default function BookTable() {
                                                 <div className="flex flex-col md:flex-row justify-center space-y-2 md:space-y-0 md:space-x-4">
                                                     <Link
                                                         className="w-full md:w-auto text-indigo-600 hover:text-indigo-900 font-medium transition duration-150 ease-in-out border border-indigo-200 py-1 px-3 rounded-md"
-                                                        to={`/admin/editbook/${book.id}`}
+                                                        to={`/admin/edituser/${user.id}`}
                                                     >
                                                         Editar
                                                     </Link>
                                                     <button
                                                         className="w-full md:w-auto text-red-600 hover:text-red-900 font-medium transition duration-150 ease-in-out border border-red-200 py-1 px-3 rounded-md"
-                                                        onClick={() => handleDialog(book.id)}
+                                                        onClick={() => handleDialog(user.id)}
                                                     >
                                                         Eliminar
                                                     </button>
@@ -239,7 +212,7 @@ export default function BookTable() {
                                     ))}
 
                                     {/* Mensaje cuando no hay resultados de búsqueda */}
-                                    {books.length > 0 && filteredLibros.length === 0 && (
+                                    {users.length > 0 && filteredUser.length === 0 && (
                                         <tr>
                                             <td colSpan={6} className="px-6 py-12 text-center text-gray-500 text-lg">
                                                 No se encontraron libros que coincidan con "{searchTerm}".
@@ -253,11 +226,11 @@ export default function BookTable() {
                     </div>
                 </div>
             </section>
-            {showDialog && selectedBook !== null && (
+            {showDialog && selectedUser !== null && (
                 <DialogConfirm
                     onCancel={() => handleDialog()}
-                    onConfirm={() => handleDelete(selectedBook)}
-                    message={`¿Seguro que deseas eliminar el libro con ID ${selectedBook}?`}
+                    onConfirm={() => handleDelete(selectedUser)}
+                    message={`¿Seguro que deseas eliminar el libro con ID ${selectedUser}?`}
                 />
             )}
         </div>
