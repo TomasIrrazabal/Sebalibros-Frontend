@@ -194,6 +194,7 @@ export function NavBarAdmin() {
         { label: 'Ver Usuarios', to: '/admin/users', minRole: Role.admin as const },
         { label: 'Crear Usuario', to: '/admin/createuser', minRole: Role.admin as const },
         { label: 'Modificar Cuenta', to: '/updateacount', minRole: Role.editor as const },
+        { label: 'Cambiar Contraseña', to: '/updatepassword', minRole: Role.editor as const },
         { label: 'Cerrar Sesion', to: '/admin/logout', minRole: Role.editor as const },
       ],
       minRole: Role.editor

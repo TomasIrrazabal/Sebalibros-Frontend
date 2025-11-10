@@ -4,6 +4,7 @@ export enum CodeType {
   BOOK_DELETED = 'book_deleted',
   USER_CREATED = 'user_created',
   USER_UPDATED = 'user_updated',
+  PASSWORD_UPDATED = 'password_updated',
   ERROR = 'error'
 }
 
