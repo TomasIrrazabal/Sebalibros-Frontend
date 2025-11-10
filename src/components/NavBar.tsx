@@ -173,21 +173,12 @@ export function NavBarAdmin() {
   const MenusAdmin: AdminMenu[] = [
     {
       label: 'Libros',
-      to: '/admin',
       minRole: Role.editor,
       items: [
-        {
-          label: 'Crear Libro', to: '/admin/createbook', minRole: Role.editor as const
-        }
+        { label: 'Ver Libros', to: '/admin', minRole: Role.editor as const },
+        { label: 'Crear Libro', to: '/admin/createbook', minRole: Role.editor as const }
       ]
     },
-    {
-      label: 'API Docs',
-      to: '/docs',
-      minRole: Role.admin
-
-    },
-
     {
       label: 'Usuarios',
       items: [
@@ -198,6 +189,11 @@ export function NavBarAdmin() {
         { label: 'Cerrar Sesion', to: '/admin/logout', minRole: Role.editor as const },
       ],
       minRole: Role.editor
+    },
+    {
+      label: 'API Docs',
+      to: '/docs',
+      minRole: Role.admin
 
     },
   ]
