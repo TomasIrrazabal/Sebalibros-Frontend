@@ -38,7 +38,7 @@ function LoginView() {
                     e.preventDefault();
                     const form = new FormData(e.currentTarget);
                     login.mutate({
-                        email: String(form.get('email')),
+                        email: String(form.get('email')).toLowerCase(),
                         password: String(form.get('password'))
                     })
                 }}
