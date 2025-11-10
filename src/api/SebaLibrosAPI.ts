@@ -42,7 +42,7 @@ export const changePassword = (payload: { currentPassword: string, newPassword: 
 // obtener todos los usuarios, req admin
 export async function getAllUsers(): Promise<UsersList> {
     try {
-        const { data } = await api.get<UsersList>('/allusers', { withCredentials: true })
+        const { data } = await api.get<UsersList>('/admin/user', { withCredentials: true })
         if (!data) throw new Error("Empty Server Response");
 
         return data
