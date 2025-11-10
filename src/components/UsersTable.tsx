@@ -4,7 +4,7 @@ import { DialogConfirm } from './DialogConfirm';
 import api from '../config/axios';
 import { handleCode } from '../features/codes/handleCode';
 import type { User } from '../types/userTypes';
-import { getAllUsers } from '../api/SebaLibrosAPI';
+import { deleteAdminUser, getAllUsers } from '../api/SebaLibrosAPI';
 
 
 
@@ -86,12 +86,12 @@ export default function UsersTable() {
 
     const handleDelete = async (id: number) => {
         try {
-            const response = await api.delete(`/admin/book/${id}`)
+            const response = await deleteAdminUser(id)
 
             if (response.status === 204) {
                 fetchUsers()
                 handleDialog()
-                handleCode('book_deleted')
+                handleCode('user_deleted')
 
             } else {
                 // Manejo de error, por ejemplo:
