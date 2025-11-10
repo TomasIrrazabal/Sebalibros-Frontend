@@ -14,6 +14,7 @@ import ApiDocs from './view/ApiDocs'
 import UpdateAcount from './components/UpdateAcount'
 import UsersTable from './components/UsersTable'
 import ModalUpdateAcount from './components/ModalUpdateAcount'
+import UpdatePassword from './components/UpdatePassword'
 
 
 export default function Router() {
@@ -38,6 +39,8 @@ export default function Router() {
                     <Route path='/admin/createuser' element={<CreateUserCard />} />
 
                     <Route path='/updateacount' element={<UpdateAcount />} />
+                    <Route path='/updatepassword' element={<UpdatePassword />} />
+
                     <Route path='/admin/users' element={<UsersTable />} />
                     <Route path='/admin/edituser/:id' element={<ModalUpdateAcount />} />
 

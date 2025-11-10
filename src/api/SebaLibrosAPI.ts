@@ -31,14 +31,18 @@ export async function logout() {
 
 // para modificar la cuenta propia
 export async function updateUser(formData: ProfileForm) {
-    const { data } = await api.patch<{ user: User }>("/user", formData);
+    const { data } = await api.patch<{ user: User }>("/user", formData, { withCredentials: true });
     return data;
 }
+
+export const changePassword = (payload: { currentPassword: string, newPassword: string }) => {
+    return api.patch('/password', payload, { withCredentials: true });
+};
 
 // obtener todos los usuarios, req admin
 export async function getAllUsers(): Promise<UsersList> {
     try {
-        const { data } = await api.get<UsersList>('/allusers')
+        const { data } = await api.get<UsersList>('/allusers', { withCredentials: true })
         if (!data) throw new Error("Empty Server Response");
 
         return data
@@ -53,7 +57,7 @@ export async function getAllUsers(): Promise<UsersList> {
 
 export async function getUserAdmin(id: string): Promise<UserWithoutPass> {
     try {
-        const { data } = await api.get<{ user: UserWithoutPass }>(`/admin/user/${id}`);
+        const { data } = await api.get<{ user: UserWithoutPass }>(`/admin/user/${id}`, { withCredentials: true });
         if (!data) throw new Error("Empty Server Response");
 
         return data.user
@@ -68,7 +72,7 @@ export async function getUserAdmin(id: string): Promise<UserWithoutPass> {
 // modificar un usuario, req admin
 export async function patchAdminUser(formData: AdminProfileForm) {
     try {
-        await api.patch("/admin/user/", formData);
+        await api.patch("/admin/user/", formData, { withCredentials: true });
         return true;
 
     } catch (error) {
