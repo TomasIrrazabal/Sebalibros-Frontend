@@ -83,3 +83,8 @@ export async function patchAdminUser(formData: AdminProfileForm) {
         }
     }
 }
+
+export async function deleteAdminUser(id: number) {
+    const response = await api.delete(`/admin/user/${id}`)
+    return response
+}

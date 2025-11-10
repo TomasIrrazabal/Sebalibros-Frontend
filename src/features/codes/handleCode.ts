@@ -53,6 +53,15 @@ export function handleCode(code: string) {
                 }
             });
             break;
+        case CodeType.USER_DELETED:
+            toast.success('Usuario eliminado correctamente', {
+                style: {
+                    background: "#E6F6E6",
+                    color: "#1A7F37",
+                    border: "1px solid #B2E3B2"
+                }
+            });
+            break;
         case CodeType.PASSWORD_UPDATED:
             toast.success('Contraseña modificado correctamente', {
                 style: {
