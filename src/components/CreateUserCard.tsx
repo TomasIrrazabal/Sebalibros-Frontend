@@ -5,6 +5,7 @@ import api from '../config/axios'
 import { isAxiosError } from 'axios'
 import { toast } from 'sonner'
 import MessageError from './MessageError'
+import { createAdminUser } from '../api/SebaLibrosAPI'
 
 function CreateUserCard() {
     const initialValues: RegisterForm = {
@@ -22,7 +23,7 @@ function CreateUserCard() {
 
     const handleRegister = async (formData: RegisterForm) => {
         try {
-            await api.post(`/admin/createuser`, formData)
+            createAdminUser(formData)
             navigate('/admin?code=user_created')
 
         } catch (error) {

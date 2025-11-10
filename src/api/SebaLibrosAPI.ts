@@ -1,6 +1,6 @@
 import { isAxiosError } from "axios"
 import api from "../config/axios"
-import { type UserWithoutPass, type AdminProfileForm, type ProfileForm, type User, type UsersList } from '../types/userTypes'
+import { type UserWithoutPass, type AdminProfileForm, type ProfileForm, type User, type UsersList, type RegisterForm } from '../types/userTypes'
 
 // obtiene el usuario autenticado
 export async function getUser() {
@@ -82,6 +82,10 @@ export async function patchAdminUser(formData: AdminProfileForm) {
             throw new Error("Unknown error fetching users");
         }
     }
+}
+export async function createAdminUser(user: RegisterForm) {
+    await api.post(`/admin/user`, user)
+    return true
 }
 
 export async function deleteAdminUser(id: number) {
